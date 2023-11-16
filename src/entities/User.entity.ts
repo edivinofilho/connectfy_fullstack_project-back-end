@@ -1,23 +1,20 @@
 import {
-    BeforeInsert,
-    BeforeUpdate,
     Column,
     CreateDateColumn,
-    DeleteDateColumn,
     Entity,
     OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
   } from "typeorm";
   
-//   import { Recipe } from "./Recipe.entity";
+  import { Contact } from "./Contact.entity";
 //   import { getRounds, hashSync } from "bcryptjs";
   
   @Entity("users")
-  export class User {
+  class User {
 
-    @PrimaryGeneratedColumn("increment")
-    id: number;
+    @PrimaryGeneratedColumn("uuid")
+    id: string;
   
     @Column({ length: 150 })
     name: string;
@@ -34,8 +31,8 @@ import {
     @CreateDateColumn({ type: "date" })
     createdAt: string;
     
-    // @OneToMany(() => Contact, (r) => r.user)
-    // recipes: Array<Recipe>;
+    @OneToMany(() => Contact, (c) => c.user)
+    contacts: Array<Contact>;
   
     // @BeforeInsert()
     // @BeforeUpdate()
@@ -46,3 +43,5 @@ import {
     //   }
     // }
   }
+
+  export { User }
