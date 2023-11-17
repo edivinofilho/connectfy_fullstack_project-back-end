@@ -9,16 +9,7 @@ class ContactsController {
   async create(req: Request, res: Response) {
     const contact: TContactRequest = res.locals.foundEntity;
 
-    // const newContact = await this.contactService.create({
-    //   name,
-    //   email,
-    //   telephone,
-    // }, user: {
-    //     name,
-
-    // });
-
-    return res.status(201).json(contact);
+   
   }
 
   async list(_: Request, res: Response) {
