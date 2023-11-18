@@ -1,22 +1,42 @@
 import { Request, Response } from "express";
-import { ContactsServices } from "../services/contacts.service";
+import { ContactsService } from "../services/contacts.service";
 import { TUserRequest } from "../interfaces/users.interfaces";
-import { TContactRequest } from "../interfaces/contacts.interfaces";
+import { TContactRequest, TContactUpdateResquest } from "../interfaces/contacts.interfaces";
 
-class ContactsController {
-  constructor(private contactService: ContactsServices) {}
+export class ContactsController {
+  constructor(private contactsService: ContactsService) {}
 
   async create(req: Request, res: Response) {
-    const contact: TContactRequest = res.locals.foundEntity;
+    const userId = res.locals.userId;
 
-   
+    const newContact = await this.contactsService.create(req.body, userId)
+
+    return res.status(201).json(newContact)
   }
 
-  async list(_: Request, res: Response) {
-    const users = await this.contactService.list();
+  async list(req: Request, res: Response) {
+    const userId = res.locals.userId;
 
-    return res.json(users);
+    const contacts = await this.contactsService.list(userId)
+
+    return res.json(contacts);
+  }
+
+
+  async update(req:Request, res: Response) {
+    const updatedValues: TContactUpdateResquest = req.body
+
+    const contactId:string = req.params.id
+
+    const updateContact = await this.contactsService.update(updatedValues, contactId)
+
+    return res.json(updateContact)
+  }
+
+  async remove(req: Request, res: Response) {
+    const contactId = req.params.id
+    await this.contactsService.remove(contactId)
+
+    res.status(204).send()
   }
 }
-
-export { ContactsController }

@@ -1,17 +1,13 @@
 import {
     Column,
     CreateDateColumn,
-    DeleteDateColumn,
     Entity,
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
-    UpdateDateColumn,
   } from "typeorm";
   import { User } from "./User.entity";
-  import { Email } from "./Email.entity";
-  import { Telephone } from "./Telephone.entity";
-
+ 
   
   @Entity("contacts")
   export class Contact {
@@ -30,13 +26,6 @@ import {
     @CreateDateColumn({ type: "date" })
     createdAt: string;
     
-    @ManyToOne(() => User, (u) => u.contacts)
-    user: User;
-
-    @OneToMany(() => Email, (e) => e.contact)
-    emails: Array<Email>;
-
-    @OneToMany(() => Telephone, (t) => t.contact)
-    telephones: Array<Telephone>;
-  
+    @ManyToOne(() => User, (u) => u.contacts, {onDelete: "CASCADE"})
+    user: User; 
   }

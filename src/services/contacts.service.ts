@@ -1,45 +1,104 @@
+import { hash } from "bcryptjs";
 import { AppDataSource } from "../data-source";
-import { Contact } from "../entities/Contact.entity";
 import { User } from "../entities/User.entity";
+import {
+  TUserResponse,
+  TUserRequest,
+  TUserUpdateResquest,
+} from "../interfaces/users.interfaces";
+import {
+  userSchema,
+  userSchemaResponse,
+  usersSchemaResponse,
+} from "../schemas/users.schema";
 import { AppError } from "../errors/AppError";
+import { Contact } from "../entities/Contact.entity";
 import {
   TContactRequest,
   TContactResponse,
+  TContactsResponse,
 } from "../interfaces/contacts.interfaces";
-import { contactsSchemaResponse } from "../schemas/contacts.schema";
+import {
+  contactSchema,
+  contactsSchemaResponse,
+} from "../schemas/contacts.schema";
 
-class ContactsServices {
-  async create(payload: TContactRequest, user: User): Promise<TContactResponse> {
-
+export class ContactsService {
+  async create(
+    data: TContactRequest,
+    userId: string
+  ): Promise<TContactResponse> {
     const contactRepository = AppDataSource.getRepository(Contact);
-    
-    const findContact = await contactRepository.findOne({
-      where: {email: payload.email},
+
+    const userRepository = AppDataSource.getRepository(User);
+
+    const user = await userRepository.findOne({
+      where: { id: userId },
     });
 
-    if (findContact) {
-      throw new AppError("Email already registered!", 409);
+    if (!user) {
+      throw new AppError("User not found", 404);
     }
     const contact = contactRepository.create({
-     ...payload,
-     user,
+      ...data,
+      user,
     });
 
     await contactRepository.save(contact);
 
-    return contactsSchemaResponse.parse(contact);
+    return contactSchema.parse(contact);
   }
 
-  async list() {
+  async list(userId: string): Promise<TContactsResponse> {
+    const userRepository = AppDataSource.getRepository(User);
+
+    const user = await userRepository.findOne({
+      where: {
+        id: userId,
+      },
+      relations: {
+        contacts: true,
+      },
+    });
+
+    if (!user) {
+      throw new AppError("User not found", 404);
+    }
+
+    return contactsSchemaResponse.parse(user.contacts);
+  }
+
+  async update(
+    data: TUserUpdateResquest,
+    contactId: string
+  ): Promise<TContactResponse> {
     const contactRepository = AppDataSource.getRepository(Contact);
-    const contacts = await contactRepository.find();
 
-    return contactsSchemaResponse.parse(contacts);
+    const oldContact = await contactRepository.findOneBy({ id: contactId });
+
+    if (!oldContact) {
+      throw new AppError("Contact not found", 404);
+    }
+
+    const updatedContact = contactRepository.create({
+      ...oldContact,
+      ...data,
+    });
+
+    await contactRepository.save(updatedContact);
+
+    return contactSchema.parse(updatedContact);
   }
 
-  async destroy(contact: Contact): Promise<void> {}
+  async remove(contactId: string): Promise<void> {
+    const contactRepository = AppDataSource.getRepository(Contact);
 
-  async update() {}
+    const contact = await contactRepository.findOneBy({ id: contactId });
+
+    if (!contact) {
+      throw new AppError("Contact not found", 404);
+    }
+
+    await contactRepository.remove(contact);
+  }
 }
-
-export { ContactsServices };

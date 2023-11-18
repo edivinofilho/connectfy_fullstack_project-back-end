@@ -1,36 +1,36 @@
 import { hash } from "bcryptjs";
 import { AppDataSource } from "../data-source";
 import { User } from "../entities/User.entity";
-import { TUserResponse, TUserRequest } from "../interfaces/users.interfaces";
+import { TUserResponse, TUserRequest, TUserUpdateResquest } from "../interfaces/users.interfaces";
 import {
+  userSchema,
   userSchemaResponse,
   usersSchemaResponse,
 } from "../schemas/users.schema";
 import { AppError } from "../errors/AppError";
+import { Contact } from "../entities/Contact.entity";
 
-class UsersService {
-  async create({
-    name,
-    email,
-    password,
-    telephone,
-  }: TUserRequest): Promise<TUserResponse> {
+export class UsersService {
+  async create(payload: TUserRequest):Promise<TUserResponse> {
+    
     const userRepository = AppDataSource.getRepository(User);
+    
     const findUser = await userRepository.findOne({
-      where: { email },
+      where: { email: payload.email}
     });
+    
 
     if (findUser) {
       throw new AppError("User already exists, please login!", 409);
     }
 
-    const hashedPassword = await hash(password, 10);
+    const hashedPassword = await hash(payload.password, 10);
 
     const user = userRepository.create({
-      name,
-      email,
+      name: payload.name,
+      email: payload.email,
       password: hashedPassword,
-      telephone,
+      telephone: payload.telephone,
     });
 
     await userRepository.save(user);
@@ -40,18 +40,80 @@ class UsersService {
 
   async list() {
     const userRepository = AppDataSource.getRepository(User);
-    const users = await userRepository.find();
+    const user = await userRepository.find();
 
-    return usersSchemaResponse.parse(users);
+    return usersSchemaResponse.parse(user);
   }
 
-  async destroy(user: User): Promise<void> {
-     
+  async remove(userId: string): Promise<void> {
+    const userRepository = AppDataSource.getRepository(User)
+
+    const contactRepository = AppDataSource.getRepository(Contact);
+
+    const user = await userRepository.findOne({
+      where: { id: userId}
+    });
+    
+
+    if (!user) {
+      throw new AppError("User not found", 404);
+    }
+   
+    await contactRepository.delete({ user: user });
+    
+    await userRepository.remove(user)
+
   }
 
-  async update() {
+  async update(data: TUserUpdateResquest, userId: string): Promise<TUserResponse> {
+    const userRepository = AppDataSource.getRepository(User);
 
+    const oldUser = await userRepository.findOneBy({id: userId})
+
+    if(!oldUser){
+      throw new AppError("User not found", 404);
+    }
+
+    const updatedUser = userRepository.create({
+          ...oldUser,
+          ...data
+        }) 
+
+    await userRepository.save(updatedUser)
+
+    return userSchema.parse(updatedUser)
   }
 }
 
-export { UsersService };
+
+// async update(data: TContactUpdateResquest, contactId: string): Promise<TContactResponse> {
+//   const contactRepository = AppDataSource.getRepository(Contact)
+
+//   const oldContact = await contactRepository.findOneBy({id: contactId})
+  
+//   if (!oldContact) {
+//     throw new AppError("Contact not found", 404);
+//   }
+
+//   const updatedContact = contactRepository.create({
+//     ...oldContact,
+//     ...data
+//   }) 
+  
+//   await contactRepository.save(updatedContact)
+
+//   return contactSchema.parse(updatedContact) 
+// }
+
+// async remove(contactId: string): Promise<void> {
+//   const contactRepository = AppDataSource.getRepository(Contact)
+
+//   const contact = await contactRepository.findOneBy({id: contactId})
+  
+//   if (!contact) {
+//     throw new AppError("Contact not found", 404);
+//   }
+
+//   await contactRepository.remove(contact)
+
+// }

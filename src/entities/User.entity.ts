@@ -34,14 +34,6 @@ import {
     @OneToMany(() => Contact, (c) => c.user)
     contacts: Array<Contact>;
   
-    // @BeforeInsert()
-    // @BeforeUpdate()
-    // hashPassword() {
-    //   const hasRounds: number = getRounds(this.password);
-    //   if (!hasRounds) {
-    //     this.password = hashSync(this.password, 10);
-    //   }
-    // }
   }
 
   export { User }

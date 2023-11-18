@@ -1,15 +1,34 @@
 import { Router } from "express";
-import { usersController } from "../controllers";
 import { ensureDataIsValidMiddleware } from "../middlewares/ensureDataIsValid.middleware";
-import { userSchemaRequest } from "../schemas/users.schema";
+import {
+  contactSchemaRequest,
+  contactSchemaUpdate,
+} from "../schemas/contacts.schema";
+import { contactsController } from "../controllers";
+import { ensureAuthMiddleware } from "../middlewares/ensureAuth.middleware";
+import { ensureIsContactsOwnerMiddleware } from "../middlewares/ensureIsContactsOwner.middleware";
 
-const usersRoutes = Router();
+const contactsRoutes = Router();
 
-usersRoutes.post("", ensureDataIsValidMiddleware(userSchemaRequest), (req: any, res: any) => 
-  usersController.create(req, res));
+contactsRoutes.use(ensureAuthMiddleware);
 
-usersRoutes.get("", (req, res) => {
-  usersController.list(req, res);
-});
+contactsRoutes.post(
+  "",
+  ensureDataIsValidMiddleware(contactSchemaRequest),
+  (req: any, res: any) => contactsController.create(req, res)
+);
 
-export { usersRoutes }
+contactsRoutes.get("", (req, res) => contactsController.list(req, res));
+
+contactsRoutes.patch(
+  "/:id",
+  ensureIsContactsOwnerMiddleware,
+  ensureDataIsValidMiddleware(contactSchemaUpdate),
+  (req:any, res:any) => contactsController.update(req, res)
+);
+
+contactsRoutes.delete("/:id", ensureIsContactsOwnerMiddleware, (req, res) =>
+  contactsController.remove(req, res)
+);
+
+export { contactsRoutes };
