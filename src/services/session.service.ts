@@ -8,6 +8,11 @@ import "dotenv/config";
 
 export class SessionService {
   async create({ email, password }: TLoginRequest) {
+
+    if (!email || !password) {
+      throw new AppError("Email and password are required fields", 400);
+    }
+
     const userRepository = AppDataSource.getRepository(User);
     const findUser = await userRepository.findOne({
       where: { email },

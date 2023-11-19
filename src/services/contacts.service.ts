@@ -30,6 +30,10 @@ export class ContactsService {
   ): Promise<TContactResponse> {
     const contactRepository = AppDataSource.getRepository(Contact);
 
+    if (!data.name || !data.email || !data.telephone) {
+      throw new AppError("Name, email and password are required fields", 400);
+    }
+
     const userRepository = AppDataSource.getRepository(User);
 
     const user = await userRepository.findOne({
@@ -39,11 +43,19 @@ export class ContactsService {
     if (!user) {
       throw new AppError("User not found", 404);
     }
+
+    const foundContact = await contactRepository.findOneBy({ email: data.email });
+
+    if (foundContact) {
+      throw new AppError("Contact already exists", 404);
+    }
+
     const contact = contactRepository.create({
       ...data,
       user,
     });
 
+    
     await contactRepository.save(contact);
 
     return contactSchema.parse(contact);

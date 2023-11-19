@@ -12,6 +12,10 @@ import { Contact } from "../entities/Contact.entity";
 
 export class UsersService {
   async create(payload: TUserRequest):Promise<TUserResponse> {
+
+    if (!payload.name || !payload.email || !payload.password || !payload.telephone) {
+      throw new AppError("Name, email, telephone and password are required fields", 400);
+    }
     
     const userRepository = AppDataSource.getRepository(User);
     
@@ -85,35 +89,3 @@ export class UsersService {
   }
 }
 
-
-// async update(data: TContactUpdateResquest, contactId: string): Promise<TContactResponse> {
-//   const contactRepository = AppDataSource.getRepository(Contact)
-
-//   const oldContact = await contactRepository.findOneBy({id: contactId})
-  
-//   if (!oldContact) {
-//     throw new AppError("Contact not found", 404);
-//   }
-
-//   const updatedContact = contactRepository.create({
-//     ...oldContact,
-//     ...data
-//   }) 
-  
-//   await contactRepository.save(updatedContact)
-
-//   return contactSchema.parse(updatedContact) 
-// }
-
-// async remove(contactId: string): Promise<void> {
-//   const contactRepository = AppDataSource.getRepository(Contact)
-
-//   const contact = await contactRepository.findOneBy({id: contactId})
-  
-//   if (!contact) {
-//     throw new AppError("Contact not found", 404);
-//   }
-
-//   await contactRepository.remove(contact)
-
-// }
