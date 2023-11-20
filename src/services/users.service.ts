@@ -50,6 +50,7 @@ export class UsersService {
   }
 
   async remove(userId: string): Promise<void> {
+    
     const userRepository = AppDataSource.getRepository(User)
 
     const contactRepository = AppDataSource.getRepository(Contact);
@@ -70,9 +71,12 @@ export class UsersService {
   }
 
   async update(data: TUserUpdateResquest, userId: string): Promise<TUserResponse> {
+
     const userRepository = AppDataSource.getRepository(User);
 
-    const oldUser = await userRepository.findOneBy({id: userId})
+    const oldUser = await userRepository.findOne({
+      where: {id: userId}
+      })
 
     if(!oldUser){
       throw new AppError("User not found", 404);
