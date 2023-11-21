@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import { UsersService } from "../services/users.service";
-import { TUserRequest, TUserUpdateResquest } from "../interfaces/users.interfaces";
+import {
+  TUserRequest,
+  TUserUpdateResquest,
+} from "../interfaces/users.interfaces";
 
 class UsersController {
   constructor(private userService: UsersService) {}
@@ -18,6 +21,20 @@ class UsersController {
     return res.status(201).json(newUser);
   }
 
+  async getUserById(req: Request, res: Response) {
+    const userId = req.params.id;
+    console.log(userId);
+
+    const user = await this.userService.getUserById(userId);
+    console.log(user);
+
+    return res.status(200).json({
+      name: user.name,
+      email: user.email,
+      userId: user.id,
+    });
+  }
+
   async list(_: Request, res: Response) {
     const users = await this.userService.list();
 
@@ -25,21 +42,21 @@ class UsersController {
   }
 
   async remove(req: Request, res: Response) {
-    const userId = req.params.id
-    await this.userService.remove(userId)
+    const userId = req.params.id;
+    await this.userService.remove(userId);
 
-    res.status(204).send()
+    res.status(204).send();
   }
 
-  async update(req:Request, res: Response) {
-    const updatedValues: TUserUpdateResquest = req.body
+  async update(req: Request, res: Response) {
+    const updatedValues: TUserUpdateResquest = req.body;
 
-    const userId = req.params.id
+    const userId = req.params.id;
 
-    const updateUser = await this.userService.update(updatedValues, userId)
+    const updateUser = await this.userService.update(updatedValues, userId);
 
-    return res.json(updateUser)
+    return res.json(updateUser);
   }
 }
 
-export { UsersController }
+export { UsersController };

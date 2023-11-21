@@ -42,6 +42,20 @@ export class UsersService {
     return userSchemaResponse.parse(user);
   }
 
+  async getUserById(userId: string): Promise<User> {
+    const userRepository = AppDataSource.getRepository(User);
+
+    const user = await userRepository.findOne({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new AppError("User not found", 404);
+    }
+
+    return user;
+  }
+  
   async list() {
     const userRepository = AppDataSource.getRepository(User);
     const user = await userRepository.find();

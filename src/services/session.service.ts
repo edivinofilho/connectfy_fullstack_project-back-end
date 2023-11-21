@@ -3,7 +3,7 @@ import { AppDataSource } from "../data-source";
 import { User } from "../entities/User.entity";
 import { AppError } from "../errors/AppError";
 import { TLoginRequest } from "../interfaces/login.interfaces";
-import { sign } from "jsonwebtoken";
+import { sign, verify } from "jsonwebtoken";
 import "dotenv/config";
 
 export class SessionService {
@@ -14,26 +14,27 @@ export class SessionService {
     }
 
     const userRepository = AppDataSource.getRepository(User);
-    const findUser = await userRepository.findOne({
+    const userData = await userRepository.findOne({
       where: { email },
     });
 
-    if (!findUser) {
+    if (!userData) {
       throw new AppError("Invalid credentials", 401);
     }
 
-    const passwordMatch = await compare(password, findUser.password);
+    const passwordMatch = await compare(password, userData.password);
 
     if (!passwordMatch) {
       throw new AppError("Invalid credentials", 401);
     }
 
-    const token = sign({ userName: findUser.name }, process.env.SECRET_KEY!, {
+    const token = sign({ name: userData.name }, process.env.SECRET_KEY!, {
       expiresIn: "2h",
-      subject: findUser.id,
+      subject: userData.id,
     });
 
-    return token;
+    return {token, userData};
     
   }
+
 }

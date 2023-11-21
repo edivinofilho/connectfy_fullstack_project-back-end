@@ -20,6 +20,8 @@ usersRoutes.post(
 
 usersRoutes.use(ensureAuthMiddleware);
 
+usersRoutes.get("/:id", ensureIsAccountsOwnerMiddleware, (req, res) => usersController.getUserById(req, res));
+
 usersRoutes.patch("/:id", ensureIsAccountsOwnerMiddleware, (req, res) => usersController.update(req, res));
 
 usersRoutes.delete("/:id", ensureIsAccountsOwnerMiddleware, (req, res) => usersController.remove(req, res));
