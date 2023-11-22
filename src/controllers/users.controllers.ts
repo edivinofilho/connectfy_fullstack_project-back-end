@@ -31,6 +31,9 @@ class UsersController {
     return res.status(200).json({
       name: user.name,
       email: user.email,
+      telephone: user.telephone,
+      password: user.password,
+      createdAt: user.createdAt,
       userId: user.id,
     });
   }
