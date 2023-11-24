@@ -327,3 +327,6 @@ Wrong Id:
 | Body: Formato Json               |
 | Status Code: 404 Not Found       |
 ![update-contact-wrong-id-response](https://github.com/Kenzie-Academy-Brasil-Developers/connectfy-backend/assets/103902774/8d24cd20-a517-4c95-815c-c947ba9e4f49)
+
+## Licença:
+Este projeto faz parte do curso Full Stack Developer da Kenzie Academy Brasil (www.kenzie.com.br). Todos os direitos e propriedade intelectual deste projeto pertencem à Kenzie Academy Brasil.
