@@ -76,6 +76,22 @@ Isso iniciará o servidor e sua API estará acessível.
 
 Lembre-se de configurar seu banco de dados PostgreSQL e ajustar as variáveis de ambiente, se necessário, usando um arquivo .env na raiz do seu projeto. Para referência, utilize o arquivo .env.example.
 
+## Testes Unitários:
+Foram construídos testes unitários que verificam elementos como:
+- CRUD - User
+- CRUD contatos
+- Login e criação de token - session
+
+  Para rodas estes testes:
+  Na raíz do projeto, no terminal, use o seguinte comando:
+  <pre>
+   npm run test
+  </pre>
+  ou
+  <pre>
+   yarn test
+  </pre>
+
 ## Rotas/Endpoints:
 
 _Sem a necessidade de autorização:_
