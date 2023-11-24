@@ -5,7 +5,6 @@ Esta API é parte do projeto FullStack Connectfy, onde o usuário pode se regist
 Link para o repositório onde está o Front deste projeto: https://github.com/Kenzie-Academy-Brasil-Developers/connectfy
 
 ## Tecnologias utilizadas nesta API:
-
 - Tecnologias Utilizadas:
 - Node.js: Ambiente de execução JavaScript.
 - Express: Framework web para Node.js.
@@ -19,9 +18,8 @@ Link para o repositório onde está o Front deste projeto: https://github.com/Ke
 - zod: Biblioteca para validação de esquema.
 
 ## Passo a Passo para Instalação:
-
 **Pré-requisitos:**
-Node.js: Certifique-se de tê-lo instalado. Você pode baixá-lo em nodejs.org.
+- Node.js: Certifique-se de tê-lo instalado. Você pode baixá-lo em nodejs.org.
 
 **Instalação no Windows:**
 Abra o terminal (PowerShell ou Prompt de Comando).
@@ -65,13 +63,13 @@ Executando a Aplicação:
 Depois de instalar as dependências, você pode executar a aplicação usando o seguinte comando:
 
 <pre>
-npm start
+npm run dev
 </pre>
 
 ou
 
 <pre>
-yarn start
+yarn run
 </pre>
 
 Isso iniciará o servidor e sua API estará acessível.
