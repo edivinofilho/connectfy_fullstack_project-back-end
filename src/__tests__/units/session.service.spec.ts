@@ -4,7 +4,6 @@ import { User } from "../../entities/User.entity";
 import { session } from "../mocks/session.mocks";
 import { SessionService } from "../../services/session.service";
 import { JwtPayload, decode } from "jsonwebtoken";
-import { compare } from "bcryptjs";
 import { AppError } from "../../errors/AppError";
 
 describe("Unit test: session functionalities", () => {
@@ -29,39 +28,26 @@ describe("Unit test: session functionalities", () => {
     await connection.destroy();
   });
 
-  it("Should be able to creat a token - Valid Payload", async () => {
+  it("Should be able to create a token - Valid Payload", async () => {
     const { base, valid } = session;
-    const { id, name, email, password, telephone } = await userRepository.save({
+    const { id, name } = await userRepository.save({
       ...base,
     });
 
     const sessionService = new SessionService();
+    const result = await sessionService.create(valid);
 
-    try {
-      const passwordMatch = await compare(valid.password, password);
-      if (!passwordMatch) {
-        throw new AppError("Invalid credentials", 401);
-      }
+    expect(result.token).toStrictEqual(expect.any(String));
 
-      const result = await sessionService.create({
-        email,
-        password: valid.password,
-      });
-      expect(result).toStrictEqual(expect.any(String));
-
-      const decodedToken = decode(result) as JwtPayload;
-      expect(decodedToken).toStrictEqual(
-        expect.objectContaining({
-          sub: id.toString(),
-          name,
-          exp: expect.any(Number),
-          iat: expect.any(Number),
-        })
-      );
-    } catch (error: any) {
-      expect(error).toBeInstanceOf(AppError);
-      expect((error as AppError).message).toBe("Invalid credentials");
-    }
+    const decodedToken = decode(result.token) as JwtPayload;
+    expect(decodedToken).toStrictEqual(
+      expect.objectContaining({
+        sub: id.toString(),
+        name,
+        exp: expect.any(Number),
+        iat: expect.any(Number),
+      })
+    );
   });
 
   it("Should not be able to create a token - Invalid Email", async () => {

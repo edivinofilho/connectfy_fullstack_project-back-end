@@ -1,16 +1,7 @@
-import { hash } from "bcryptjs";
 import { AppDataSource } from "../data-source";
 import { User } from "../entities/User.entity";
-import {
-  TUserResponse,
-  TUserRequest,
-  TUserUpdateResquest,
-} from "../interfaces/users.interfaces";
-import {
-  userSchema,
-  userSchemaResponse,
-  usersSchemaResponse,
-} from "../schemas/users.schema";
+import { TUserUpdateResquest } from "../interfaces/users.interfaces";
+
 import { AppError } from "../errors/AppError";
 import { Contact } from "../entities/Contact.entity";
 import {
@@ -22,6 +13,7 @@ import {
   contactSchema,
   contactsSchemaResponse,
 } from "../schemas/contacts.schema";
+
 
 export class ContactsService {
   async create(
@@ -44,7 +36,9 @@ export class ContactsService {
       throw new AppError("User not found", 404);
     }
 
-    const foundContact = await contactRepository.findOneBy({ email: data.email });
+    const foundContact = await contactRepository.findOneBy({
+      email: data.email,
+    });
 
     if (foundContact) {
       throw new AppError("Contact already exists", 404);
@@ -55,7 +49,6 @@ export class ContactsService {
       user,
     });
 
-    
     await contactRepository.save(contact);
 
     return contactSchema.parse(contact);
@@ -87,6 +80,7 @@ export class ContactsService {
     const contactRepository = AppDataSource.getRepository(Contact);
 
     const oldContact = await contactRepository.findOneBy({ id: contactId });
+    console.log(oldContact)
 
     if (!oldContact) {
       throw new AppError("Contact not found", 404);

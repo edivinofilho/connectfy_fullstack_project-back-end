@@ -11,6 +11,12 @@ type TContact = z.infer<typeof contactSchema>;
 type TContactResponse = z.infer<typeof contactSchema>;
 type TContactsResponse = z.infer<typeof contactsSchemaResponse>;
 
-type TContactUpdateResquest = DeepPartial<TContactRequest>
+type TContactUpdateResquest = DeepPartial<TContactRequest>;
 
-export { TContact, TContactRequest, TContactResponse, TContactsResponse, TContactUpdateResquest };
+export {
+  TContact,
+  TContactRequest,
+  TContactResponse,
+  TContactsResponse,
+  TContactUpdateResquest,
+};

@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { userSchema } from "./users.schema";
 
 const contactSchema = z.object({
   id: z.string().uuid(),
@@ -14,15 +13,18 @@ const contactSchemaRequest = contactSchema.omit({
   createdAt: true,
 });
 
-// const contactSchemaResponse = contactSchema.omit({
-//   user: true
-// })
+const contactsSchemaResponse = z.array(contactSchema);
 
-const contactsSchemaResponse= z.array(contactSchema);
+const contactSchemaUpdate = contactSchema
+  .omit({
+    id: true,
+    createdAt: true,
+  })
+  .partial();
 
-const contactSchemaUpdate = contactSchema.omit({
-  id: true,
-  createdAt: true,
-}).partial();
-
-export { contactSchema, contactSchemaRequest, contactsSchemaResponse, contactSchemaUpdate };
+export {
+  contactSchema,
+  contactSchemaRequest,
+  contactsSchemaResponse,
+  contactSchemaUpdate,
+};

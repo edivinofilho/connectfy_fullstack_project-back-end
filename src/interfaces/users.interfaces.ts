@@ -12,6 +12,12 @@ type TUser = z.infer<typeof userSchema>;
 type TUserResponse = z.infer<typeof userSchemaResponse>;
 type TUsersResponse = z.infer<typeof usersSchemaResponse>;
 
-type TUserUpdateResquest = DeepPartial<TUserRequest>
+type TUserUpdateResquest = DeepPartial<TUserRequest>;
 
-export { TUser, TUserRequest, TUserResponse, TUsersResponse, TUserUpdateResquest };
+export {
+  TUser,
+  TUserRequest,
+  TUserResponse,
+  TUsersResponse,
+  TUserUpdateResquest,
+};

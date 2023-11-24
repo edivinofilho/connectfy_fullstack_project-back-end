@@ -16,18 +16,18 @@ export const ensureIsAccountsOwnerMiddleware = async (
   const user = await userRepository.findOne({
     where: {
       id: userId,
-    }
+    },
   });
-
-  console.log(accountOwner)
-  console.log(userId)
 
   if (!user) {
     throw new AppError("User not found", 404);
   }
 
   if (user.id !== accountOwner) {
-    throw new AppError("You don't have permission for any action regarding this account", 403);
+    throw new AppError(
+      "You don't have permission for any action regarding this account",
+      403
+    );
   }
 
   return next();

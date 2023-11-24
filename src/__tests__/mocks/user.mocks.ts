@@ -17,5 +17,4 @@ export const createUser = {
     name: "UpdatedName",
     telephone: "5551234",
   },
-
 };

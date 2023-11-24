@@ -1,8 +1,7 @@
 import { Router } from "express";
 import { usersController } from "../controllers";
 import { ensureDataIsValidMiddleware } from "../middlewares/ensureDataIsValid.middleware";
-import { userSchemaRequest, userSchemaUpdate } from "../schemas/users.schema";
-import { ensureIsContactsOwnerMiddleware } from "../middlewares/ensureIsContactsOwner.middleware";
+import { userSchemaRequest } from "../schemas/users.schema";
 import { ensureIsAccountsOwnerMiddleware } from "../middlewares/ensureIsAccountOwner.middleware";
 import { ensureAuthMiddleware } from "../middlewares/ensureAuth.middleware";
 
@@ -20,11 +19,16 @@ usersRoutes.post(
 
 usersRoutes.use(ensureAuthMiddleware);
 
-usersRoutes.get("/:id", ensureIsAccountsOwnerMiddleware, (req, res) => usersController.getUserById(req, res));
+usersRoutes.get("/:id", ensureIsAccountsOwnerMiddleware, (req, res) =>
+  usersController.getUserById(req, res)
+);
 
-usersRoutes.patch("/:id", ensureIsAccountsOwnerMiddleware, (req, res) => usersController.update(req, res));
+usersRoutes.patch("/:id", ensureIsAccountsOwnerMiddleware, (req, res) =>
+  usersController.update(req, res)
+);
 
-usersRoutes.delete("/:id", ensureIsAccountsOwnerMiddleware, (req, res) => usersController.remove(req, res));
-
+usersRoutes.delete("/:id", ensureIsAccountsOwnerMiddleware, (req, res) =>
+  usersController.remove(req, res)
+);
 
 export { usersRoutes };

@@ -22,11 +22,9 @@ class UsersController {
   }
 
   async getUserById(req: Request, res: Response) {
-    const userId = req.params.id;
-    console.log(userId);
+    const id = req.params.id;
 
-    const user = await this.userService.getUserById(userId);
-    console.log(user);
+    const user = await this.userService.getUserById(id);
 
     return res.status(200).json({
       name: user.name,
@@ -34,7 +32,7 @@ class UsersController {
       telephone: user.telephone,
       password: user.password,
       createdAt: user.createdAt,
-      userId: user.id,
+      id: user.id,
     });
   }
 

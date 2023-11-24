@@ -3,12 +3,11 @@ import { AppDataSource } from "../data-source";
 import { User } from "../entities/User.entity";
 import { AppError } from "../errors/AppError";
 import { TLoginRequest } from "../interfaces/login.interfaces";
-import { sign, verify } from "jsonwebtoken";
+import { sign } from "jsonwebtoken";
 import "dotenv/config";
 
 export class SessionService {
   async create({ email, password }: TLoginRequest) {
-
     if (!email || !password) {
       throw new AppError("Email and password are required fields", 400);
     }
@@ -33,8 +32,6 @@ export class SessionService {
       subject: userData.id,
     });
 
-    return {token, userData};
-    
+    return { token, userData };
   }
-
 }

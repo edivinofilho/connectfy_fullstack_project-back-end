@@ -24,7 +24,7 @@ contactsRoutes.patch(
   "/:id",
   ensureIsContactsOwnerMiddleware,
   ensureDataIsValidMiddleware(contactSchemaUpdate),
-  (req:any, res:any) => contactsController.update(req, res)
+  (req: any, res: any) => contactsController.update(req, res)
 );
 
 contactsRoutes.delete("/:id", ensureIsContactsOwnerMiddleware, (req, res) =>
