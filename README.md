@@ -78,11 +78,11 @@ Lembre-se de configurar seu banco de dados PostgreSQL e ajustar as variáveis de
 
 ## Testes Unitários:
 Foram construídos testes unitários que verificam elementos como:
-- CRUD - User
-- CRUD contatos
+- CRUD - user
+- CRUD - contacts
 - Login e criação de token - session
 
-  Para rodas estes testes:
+  Para utilizar estes testes:
   Na raíz do projeto, no terminal, use o seguinte comando:
   <pre>
    npm run test
