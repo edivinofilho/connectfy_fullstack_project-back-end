@@ -491,11 +491,11 @@ Success:
 
 <pre>
 {
-  "id": "157b1b1d-ea32-49cb-97b1-2165008407da",
-	"name":"New Contact",
-	"email":"newcontact@mail.com",
-	"telephone":"5551234",
-  "createdAt: "2023-11-24"
+ "id": "157b1b1d-ea32-49cb-97b1-2165008407da",
+ "name":"New Contact",
+ "email":"newcontact@mail.com",
+ "telephone":"5551234",
+ "createdAt: "2023-11-24"
 }
 </pre>
 
